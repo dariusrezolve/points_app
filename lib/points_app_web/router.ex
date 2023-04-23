@@ -14,10 +14,23 @@ defmodule PointsAppWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", PointsAppWeb do
-    pipe_through :browser
+  pipeline :openapi do
+    plug OpenApiSpex.Plug.PutApiSpec, module: PointsApp.ApiSpec
+  end
 
-    get "/", PageController, :home
+  scope "/", PointsAppWeb do
+    pipe_through :api
+
+    get "/", UsersController, :get_users
+  end
+
+  scope "/" do
+    scope "/openapi" do
+      pipe_through :openapi
+      get "/", OpenApiSpex.Plug.RenderSpec, []
+    end
+
+    get "/doc", OpenApiSpex.Plug.SwaggerUI, path: "/openapi"
   end
 
   # Other scopes may use custom stacks.

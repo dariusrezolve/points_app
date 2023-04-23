@@ -17,7 +17,9 @@ defmodule PointsApp.Application do
       # Start Finch
       {Finch, name: PointsApp.Finch},
       # Start the Endpoint (http/https)
-      PointsAppWeb.Endpoint
+      PointsAppWeb.Endpoint,
+      PointsApp.PointsServer,
+      PointsApp.DataUpdater
       # Start a worker by calling: PointsApp.Worker.start_link(arg)
       # {PointsApp.Worker, arg}
     ]

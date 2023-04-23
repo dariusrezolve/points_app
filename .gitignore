@@ -35,3 +35,5 @@ points_app-*.tar
 npm-debug.log
 /assets/node_modules/
 
+lib/points_app/.DS_Store
+lib/.DS_Store

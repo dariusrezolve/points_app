@@ -18,6 +18,6 @@ defmodule PointsApp.Storage.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, @fields)
-    |> validate_required(@fields -- [:inserted_at, :updated_at])
+    |> validate_required(@fields -- [:id, :inserted_at, :updated_at])
   end
 end

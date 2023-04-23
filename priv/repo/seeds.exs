@@ -1,19 +1,22 @@
 alias PointsApp.Repo
 alias PointsApp.Storage.User
+import Ecto.Query
 
-entries =
-  for _i <- 1..1_000_000,
-      do: %{
-        points: 0,
-        inserted_at: DateTime.utc_now() |> DateTime.truncate(:second),
-        updated_at: DateTime.utc_now() |> DateTime.truncate(:second)
-      }
+IO.puts("Seeding database")
+no_of_rows = 1_000_000
+IO.puts("Inserting #{no_of_rows} rows")
 
-entries
-# 65535 is the max number of parameters in a postgres query (we have 3 params per entry)
-|> Enum.chunk_every(20_000)
-|> Enum.each(fn chunk ->
-  Repo.insert_all(User, chunk)
-end)
+# for seeding this approach is quick enough (~20 sec) and therefore no batching was done here
+insert_query = "
+ INSERT INTO users(points, inserted_at, updated_at)
+    select 0, now(), now()  from generate_series(1, #{no_of_rows});
+ "
 
-# version 2 ->TODO:  Use postgres COPY and generate_series to generate the data and insert it in one go
+# optimise the insert
+Ecto.Adapters.SQL.query!(Repo, "DROP INDEX IF EXISTS users_points_idx")
+Ecto.Adapters.SQL.query!(Repo, insert_query)
+Ecto.Adapters.SQL.query!(Repo, "CREATE INDEX users_points_idx ON public.users (points)")
+
+Repo.one(from u in User, select: count()) |> IO.inspect(label: "Count: ")
+
+IO.puts("Done")
