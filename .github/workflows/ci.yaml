@@ -1,0 +1,20 @@
+name: PointsApp CI
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  test:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-elixir@v1
+
+      - name: Run Tests
+        run: docker-compose run --rm -e "MIX_ENV=test" app  mix test
+

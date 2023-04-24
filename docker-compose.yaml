@@ -9,25 +9,32 @@ services:
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: postgres
         POSTGRES_DB: points_app_dev
+        PGHOST: db
+        PGPORT: 5432
+      restart: always
       volumes:
         - postgres_data:/var/lib/postgresql/data
-      networks:
-        - points_app_network
 
     app:
       build: .
+      volumes:
+        - .:/app
       environment:
         DATABASE_URL: postgres://postgres:postgres@db/points_app_dev
+        PGUSER: postgres
+        PGPASSWORD: postgres
+        PGDATABASE: points_app_dev
+        PGHOST: db
+        PGPORT: 5432
+        MIX_ENV: dev
       ports:
         - "4000:4000"
       depends_on:
         - db
-      networks:
-        - points_app_network
+      command:
+        - "./entrypoint.sh"
 
 
 volumes:
     postgres_data:
 
-networks:
-    points_app_network:

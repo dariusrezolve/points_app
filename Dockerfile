@@ -1,21 +1,17 @@
-#Use an official Elixir runtime as a parent image
 FROM elixir:latest
 
-# Set the working directory to /app
- WORKDIR /app
+RUN apt-get update && \
+    apt-get install -y postgresql-client && \
+    apt-get install -y inotify-tools && \
+    apt-get install -y nodejs && \
+    mix local.hex --force && \
+    mix archive.install hex phx_new --force && \
+    mix local.rebar --force
 
-# # Copy the current directory contents into the container at /app
- COPY . /app
 
-# # Install Hex package manager and Rebar build tool
- RUN mix local.hex --force && \
-     mix local.rebar --force
+ENV APP_HOME /app
+RUN mkdir -p $APP_HOME
+WORKDIR $APP_HOME
 
-#     # Install the project dependencies
-     RUN mix deps.get
-#
-#     # Compile the project
-     RUN mix compile
+EXPOSE 4000
 
-#     # Start the application
-     CMD ["mix", "phx.server", "--no-halt"]

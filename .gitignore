@@ -37,3 +37,5 @@ npm-debug.log
 
 lib/points_app/.DS_Store
 lib/.DS_Store
+
+/data

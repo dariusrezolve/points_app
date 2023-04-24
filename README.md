@@ -27,6 +27,12 @@ Prerequirements:
 Once the server is up and running, you can use [`localhost:4000/doc#`](http://localhost:4000/doc#) to access the Swagger API doc. This will also provide a way to directly test the
 endpoint
 
+#### Run in docker
+- clone repo
+- docker-compose build
+- docker-compose up
+
+
 #### Running tests
 - run `MIX_ENV=test mix test`
 
