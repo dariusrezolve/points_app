@@ -17,10 +17,10 @@ defmodule PointsApp.Storage do
   end
 
   def update_all_users_in_batches do
-    # as an optimization we could just consider the row count to be the one we used for seedin
+    # as an optimization we could just consider the row count to be the one we used for seeding
     # and therefore not need to do a count query
     no_of_rows = Repo.one(from u in User, select: count())
-    batch_size = 50_000
+    batch_size = 100_000
     # no transaction is needed here
     Enum.each(0..div(no_of_rows, batch_size), fn i ->
       Ecto.Adapters.SQL.query!(
