@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+    db:
+      image: postgres
+      ports:
+        - "5432:5432"
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: points_app_dev
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+      networks:
+        - points_app_network
+
+    app:
+      build: .
+      environment:
+        DATABASE_URL: postgres://postgres:postgres@db/points_app_dev
+      ports:
+        - "4000:4000"
+      depends_on:
+        - db
+      networks:
+        - points_app_network
+
+
+volumes:
+    postgres_data:
+
+networks:
+    points_app_network:

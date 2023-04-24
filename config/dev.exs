@@ -8,7 +8,7 @@ config :points_app, PointsApp.Repo,
   database: "points_app_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
-  pool_size: 10,
+  pool_size: 20,
   # TODO: Replace this with a reasonable timeout
   timeout: :infinity
 
@@ -80,4 +80,5 @@ config :phoenix, :plug_init_mode, :runtime
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
 
+# for dev testing we set the timer to 10 sec rather than 1 min
 config :points_app, :timer_interval, System.get_env("TIMER_INTERVAL") || 10_000

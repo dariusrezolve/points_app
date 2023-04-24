@@ -15,7 +15,6 @@ defmodule PointsApp.PointsServer do
   @impl true
   def init(_init_arg) do
     Application.get_env(:points_app, :timer_interval, 60_000)
-    |> IO.inspect(label: "timer interval")
 
     schedule_work()
     {:ok, %{timestamp: nil, min_number: 0}}
@@ -57,6 +56,7 @@ defmodule PointsApp.PointsServer do
       )
 
   # client API
+  @spec get_users() :: %{users: list, timestamp: String.t()}
   def get_users() do
     GenServer.call(__MODULE__, :get_winners)
   end

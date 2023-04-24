@@ -50,10 +50,11 @@ defmodule PointsApp.DataUpdater do
   end
 
   defp do_update_data(pid) do
-    StorageApi.update_all_users()
+    StorageApi.update_all_users_in_batches()
     Process.send(pid, :update_done, [])
   end
 
   # client API
+  @spec update_data() :: :ok
   def update_data(), do: GenServer.cast(__MODULE__, :update_data)
 end

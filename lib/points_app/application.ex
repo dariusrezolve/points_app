@@ -17,17 +17,25 @@ defmodule PointsApp.Application do
       # Start Finch
       {Finch, name: PointsApp.Finch},
       # Start the Endpoint (http/https)
-      PointsAppWeb.Endpoint,
-      PointsApp.PointsServer,
-      PointsApp.DataUpdater
+      PointsAppWeb.Endpoint
       # Start a worker by calling: PointsApp.Worker.start_link(arg)
       # {PointsApp.Worker, arg}
     ]
 
+    all_children =
+      case Mix.env() do
+        # we don't want to start these Genservers in test mode
+        :test ->
+          children
+
+        _ ->
+          children ++ [PointsApp.PointsServer, PointsApp.DataUpdater]
+      end
+
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: PointsApp.Supervisor]
-    Supervisor.start_link(children, opts)
+    Supervisor.start_link(all_children, opts)
   end
 
   # Tell Phoenix to update the endpoint configuration
