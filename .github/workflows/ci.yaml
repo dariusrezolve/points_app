@@ -13,8 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-elixir@v1
-
       - name: Run Tests
-        run: docker-compose run --rm -e "MIX_ENV=test" app  mix test
+        run: docker-compose run --rm -e "MIX_ENV=test"  -e "PGDATABASE=points_app_test" app mix do deps.get, compile --warnings-as-errors, test
 

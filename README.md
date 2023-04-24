@@ -29,8 +29,7 @@ endpoint
 
 #### Run in docker
 - clone repo
-- docker-compose build
-- docker-compose up
+- `docker-compose up`
 
 
 #### Running tests
