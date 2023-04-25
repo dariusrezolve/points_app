@@ -22,7 +22,6 @@ defmodule PointApp.PointsServerTest do
 
   describe "handle_call" do
     test "timestamp is refreshed and previous timestamp is retrieved" do
-      # here we use the real implementation
       user_fixture()
       user_fixture()
       # make sure it's in the past
@@ -36,7 +35,6 @@ defmodule PointApp.PointsServerTest do
           min_number: 0
         })
 
-      # min_number should be refreshed
       assert previous_call_timestamp == call_timestamp
       assert new_call_timestamp > call_timestamp
     end

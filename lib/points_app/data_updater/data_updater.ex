@@ -32,7 +32,11 @@ defmodule PointsApp.DataUpdater do
 
         false ->
           Logger.info("[DataUpdater]: Starting update at #{Helpers.get_timestamp()}")
-          Task.async(fn -> do_update_data(updater_pid) end)
+
+          Task.start(fn ->
+            do_update_data(updater_pid)
+          end)
+
           %{is_updating: true}
       end
 

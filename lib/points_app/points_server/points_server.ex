@@ -14,10 +14,8 @@ defmodule PointsApp.PointsServer do
   # TODO: handle timer cancelation if needed
   @impl true
   def init(_init_arg) do
-    Application.get_env(:points_app, :timer_interval, 60_000)
-
     schedule_work()
-    {:ok, %{timestamp: nil, min_number: 0}}
+    {:ok, %{timestamp: nil, min_number: Helpers.get_random_number(@max_random_number)}}
   end
 
   @impl true
@@ -39,9 +37,12 @@ defmodule PointsApp.PointsServer do
   end
 
   @impl true
-  def handle_call(:get_winners, _from, state) do
-    users = StorageApi.get_users_with_more_points_than(state.min_number)
-    old_timestamp = Map.get(state, :timestamp)
+  def handle_call(
+        :get_winners,
+        _from,
+        %{timestamp: old_timestamp, min_number: min_number} = state
+      ) do
+    users = StorageApi.get_users_with_more_points_than(min_number)
     new_state = Map.merge(state, %{timestamp: Helpers.get_timestamp()})
 
     {:reply, %{users: users, timestamp: old_timestamp}, new_state}
@@ -56,7 +57,7 @@ defmodule PointsApp.PointsServer do
       )
 
   # client API
-  @spec get_users() :: %{users: list, timestamp: String.t()}
+  @spec get_users() :: %{users: list(), timestamp: String.t()}
   def get_users() do
     GenServer.call(__MODULE__, :get_winners)
   end

@@ -96,4 +96,4 @@ Percentage of the requests served within a certain time (ms)
 - cleanup code of phoenix generator boilerplate
 - add telemetry
 - add timer cancelation/reset (or some circuit breaker for DB update job)
-- add CI: formatting, running tests
+
