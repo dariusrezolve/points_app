@@ -8,6 +8,7 @@ defmodule PointsApp.Storage do
 
   alias PointsApp.Storage.User
 
+  @throttle_ms 100
   def get_users_with_more_points_than(points) do
     Repo.all(
       from u in User,
@@ -27,6 +28,8 @@ defmodule PointsApp.Storage do
         Repo,
         "update users set points = floor(random() * 101), updated_at = now() where id in (select  id from users offset #{i * batch_size} limit #{batch_size})"
       )
+
+      Process.sleep(@throttle_ms)
     end)
   end
 
